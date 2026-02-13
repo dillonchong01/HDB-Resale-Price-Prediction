@@ -6,3 +6,4 @@ xgboost==3.0.5
 joblib
 gunicorn
 requests
+scikit-learn
