@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About - HDB Resale Price Predictor</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
     <header class="header">
-        <a href="{{ url_for('index') }}" class="logo">HDB Resale Price Predictor</a>
+        <a href="/templates/index.html" class="logo">HDB Resale Price Predictor</a>
         <nav class="nav">
-            <a href="{{ url_for('index') }}">Home</a>
-            <a href="{{ url_for('about') }}" class="active">About</a>
+            <a href="/templates/index.html">Home</a>
+            <a href="/templates/about.html" class="active">About</a>
         </nav>
     </header>
 
