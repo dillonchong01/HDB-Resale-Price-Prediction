@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HDB Resale Price Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header class="header">
+        <a href="{{ url_for('index') }}" class="logo">HDB Resale Price Predictor</a>
+        <nav class="nav">
+            <a href="{{ url_for('index') }}" class="active">Home</a>
+            <a href="{{ url_for('about') }}">About</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="card-container">
+            <div class="card" id="card">
+                <div class="step-indicator">
+                    <div class="dot active" data-step="1"></div>
+                    <div class="dot" data-step="2"></div>
+                    <div class="dot" data-step="3"></div>
+                    <div class="dot" data-step="4"></div>
+                    <div class="dot" data-step="5"></div>
+                    <div class="dot" data-step="6"></div>
+                </div>
+
+                <!-- Question 1 -->
+                <div class="question active" data-q="1">
+                    <div class="question-number">Question 1 of 6</div>
+                    <h2>HDB Address</h2>
+                    <p>Enter the full HDB block and street name</p>
+                    <div class="input-wrapper">
+                        <label>Address</label>
+                        <input type="text" id="address" placeholder="Blk 123 Ang Mo Kio Avenue 3">
+                    </div>
+                    <div class="controls">
+                        <button class="btn btn-next" onclick="next()">Continue</button>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="question" data-q="2">
+                    <div class="question-number">Question 2 of 6</div>
+                    <h2>Flat Type</h2>
+                    <p>Choose the unit configuration</p>
+                    <div class="input-wrapper">
+                        <label>Flat Type</label>
+                        <select id="flat_type">
+                            <option value="">Choose an option</option>
+                            <option value="1 ROOM">1 Room</option>
+                            <option value="2 ROOM">2 Room</option>
+                            <option value="3 ROOM">3 Room</option>
+                            <option value="4 ROOM">4 Room</option>
+                            <option value="5 ROOM">5 Room</option>
+                            <option value="EXECUTIVE">Executive</option>
+                            <option value="MULTI-GENERATION">Multi-Generation</option>
+                        </select>
+                    </div>
+                    <div class="controls">
+                        <button class="btn btn-back" onclick="back()">Back</button>
+                        <button class="btn btn-next" onclick="next()">Continue</button>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="question" data-q="3">
+                    <div class="question-number">Question 3 of 6</div>
+                    <h2>Floor / Storey</h2>
+                    <div class="input-wrapper">
+                        <label>Floor Level (1-50)</label>
+                        <input type="number" id="floor_level" min="1" max="50" placeholder="10">
+                    </div>
+                    <div class="controls">
+                        <button class="btn btn-back" onclick="back()">Back</button>
+                        <button class="btn btn-next" onclick="next()">Continue</button>
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="question" data-q="4">
+                    <div class="question-number">Question 4 of 6</div>
+                    <h2>Remaining Lease</h2>
+                    <div class="input-wrapper">
+                        <label>Remaining Lease (years)</label>
+                        <input type="number" id="remaining_lease" min="0" max="99" placeholder="85">
+                        <div id="lease-badge" class="badge"></div>
+                    </div>
+                    <div class="controls">
+                        <button class="btn btn-back" onclick="back()">Back</button>
+                        <button class="btn btn-next" onclick="next()">Continue</button>
+                    </div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="question" data-q="5">
+                    <div class="question-number">Question 5 of 6</div>
+                    <h2>Floor Area</h2>
+                    <div class="input-wrapper">
+                        <label>Floor Area (sqm)</label>
+                        <input type="number" id="floor_area" min="20" max="200" step="0.1" placeholder="90">
+                        <div id="area-badge" class="badge"></div>
+                    </div>
+                    <div class="controls">
+                        <button class="btn btn-back" onclick="back()">Back</button>
+                        <button class="btn btn-next" onclick="next()">Continue</button>
+                    </div>
+                </div>
+
+                <!-- Question 6 -->
+                <div class="question" data-q="6">
+                    <div class="question-number">Question 6 of 6</div>
+                    <h2>Town</h2>
+                    <div class="input-wrapper">
+                        <label>Town</label>
+                        <select id="town">
+                            <option value="">Choose a town</option>
+                            <option value="ANG MO KIO">Ang Mo Kio</option>
+                            <option value="BEDOK">Bedok</option>
+                            <option value="BISHAN">Bishan</option>
+                            <option value="BUKIT BATOK">Bukit Batok</option>
+                            <option value="BUKIT MERAH">Bukit Merah</option>
+                            <option value="BUKIT PANJANG">Bukit Panjang</option>
+                            <option value="BUKIT TIMAH">Bukit Timah</option>
+                            <option value="CENTRAL">Central</option>
+                            <option value="CHOA CHU KANG">Choa Chu Kang</option>
+                            <option value="CLEMENTI">Clementi</option>
+                            <option value="GEYLANG">Geylang</option>
+                            <option value="HOUGANG">Hougang</option>
+                            <option value="JURONG EAST">Jurong East</option>
+                            <option value="JURONG WEST">Jurong West</option>
+                            <option value="KALLANG/WHAMPOA">Kallang/Whampoa</option>
+                            <option value="MARINE PARADE">Marine Parade</option>
+                            <option value="PASIR RIS">Pasir Ris</option>
+                            <option value="PUNGGOL">Punggol</option>
+                            <option value="QUEENSTOWN">Queenstown</option>
+                            <option value="SEMBAWANG">Sembawang</option>
+                            <option value="SENGKANG">Sengkang</option>
+                            <option value="SERANGOON">Serangoon</option>
+                            <option value="TAMPINES">Tampines</option>
+                            <option value="TOA PAYOH">Toa Payoh</option>
+                            <option value="WOODLANDS">Woodlands</option>
+                            <option value="YISHUN">Yishun</option>
+                        </select>
+                        <div id="town-badge" class="badge"></div>
+                    </div>
+                    <div class="controls">
+                        <button class="btn btn-back" onclick="back()">Back</button>
+                        <button class="btn btn-submit" onclick="submit(event)">Get Price</button>
+                    </div>
+                </div>
+
+                <!-- Result -->
+                <div class="result-card" id="result">
+                    <h2>Estimated Resale Price</h2>
+                    <div class="price-display">
+                        <div class="price-value" id="price">$0</div>
+                    </div>
+                    <div class="summary" id="summary"></div>
+                    <div class="controls">
+                        <button class="btn btn-next" onclick="reset()">Start Over</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const API_URL = '/api';
+        let currentQ = 1;
+        let lookupData = null;
+
+        function next() {
+            if (!validate()) return;
+
+            if (currentQ === 2) lookup();
+
+            const current = document.querySelector(`.question[data-q="${currentQ}"]`);
+            current.classList.add('slide-out-left');
+            
+            setTimeout(() => {
+                current.classList.remove('active', 'slide-out-left');
+                currentQ++;
+                const next = document.querySelector(`.question[data-q="${currentQ}"]`);
+                next.classList.add('active', 'slide-in-right');
+                updateDots();
+                
+                setTimeout(() => {
+                    next.classList.remove('slide-in-right');
+                }, 600);
+            }, 300);
+        }
+
+        function back() {
+            const current = document.querySelector(`.question[data-q="${currentQ}"]`);
+            current.classList.add('slide-out-right');
+            
+            setTimeout(() => {
+                current.classList.remove('active', 'slide-out-right');
+                currentQ--;
+                const prev = document.querySelector(`.question[data-q="${currentQ}"]`);
+                prev.classList.add('active', 'slide-in-left');
+                updateDots();
+                
+                setTimeout(() => {
+                    prev.classList.remove('slide-in-left');
+                }, 600);
+            }, 300);
+        }
+
+        function updateDots() {
+            document.querySelectorAll('.dot').forEach((dot, i) => {
+                const step = i + 1;
+                if (step < currentQ) {
+                    dot.classList.add('completed');
+                    dot.classList.remove('active');
+                } else if (step === currentQ) {
+                    dot.classList.add('active');
+                    dot.classList.remove('completed');
+                } else {
+                    dot.classList.remove('active', 'completed');
+                }
+            });
+        }
+
+        function validate() {
+            let val, msg;
+            switch(currentQ) {
+                case 1: 
+                    val = document.getElementById('address').value.trim();
+                    msg = 'Please enter an address';
+                    break;
+                case 2:
+                    val = document.getElementById('flat_type').value;
+                    msg = 'Please select a flat type';
+                    break;
+                case 3:
+                    val = document.getElementById('floor_level').value;
+                    if (!val || val < 1 || val > 50) return error('Floor level must be between 1 and 50');
+                    return true;
+                case 4:
+                    val = document.getElementById('remaining_lease').value;
+                    if (!val || val < 0 || val > 99) return error('Remaining lease must be between 0 and 99');
+                    return true;
+                case 5:
+                    val = document.getElementById('floor_area').value;
+                    if (!val || val < 20 || val > 200) return error('Floor area must be between 20 and 200');
+                    return true;
+                case 6:
+                    val = document.getElementById('town').value;
+                    msg = 'Please select a town';
+                    break;
+            }
+            if (!val) return error(msg);
+            return true;
+        }
+
+        async function lookup() {
+            const address = document.getElementById('address').value.trim();
+            const flatType = document.getElementById('flat_type').value;
+            
+            try {
+                const res = await fetch(`${API_URL}/lookup-address`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ address, flat_type: flatType })
+                });
+                const data = await res.json();
+
+                if (data.found) {
+                    lookupData = data;
+                    if (data.remaining_lease) {
+                        document.getElementById('remaining_lease').value = data.remaining_lease;
+                        badge('lease-badge', '✓ Auto-filled');
+                    }
+                    if (data.floor_area) {
+                        document.getElementById('floor_area').value = data.floor_area;
+                        badge('area-badge', '✓ Auto-filled');
+                    }
+                    if (data.town) {
+                        document.getElementById('town').value = data.town;
+                        badge('town-badge', '✓ Auto-filled');
+                    }
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function submit() {
+            if (!validate()) return;
+
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = 'Calculating...';
+
+            try {
+                const res = await fetch(`${API_URL}/predict`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        address: document.getElementById('address').value.trim(),
+                        town: document.getElementById('town').value,
+                        flat_type: document.getElementById('flat_type').value,
+                        floor_area: parseFloat(document.getElementById('floor_area').value),
+                        floor_level: parseInt(document.getElementById('floor_level').value),
+                        remaining_lease: parseInt(document.getElementById('remaining_lease').value)
+                    })
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    showResult(
+                        data.predicted_price,
+                        data.distance_to_mrt,
+                        data.distance_to_mall
+                    );
+                } else {
+                    error(data.error || 'Prediction failed');
+                }
+            } catch (e) {
+                error('Connection error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Get Price';
+            }
+        }
+
+        function showResult(price, distanceToMRT, distanceToMall) {
+            document.getElementById('price').textContent =
+                '$' + price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            document.getElementById('summary').innerHTML = `
+                <div class="summary-row"><span class="summary-label">Address</span><span class="summary-value">${document.getElementById('address').value}</span></div>
+                <div class="summary-row"><span class="summary-label">Town</span><span class="summary-value">${document.getElementById('town').value}</span></div>
+                <div class="summary-row"><span class="summary-label">Type</span><span class="summary-value">${document.getElementById('flat_type').value}</span></div>
+                <div class="summary-row"><span class="summary-label">Area</span><span class="summary-value">${document.getElementById('floor_area').value} sqm</span></div>
+                <div class="summary-row"><span class="summary-label">Floor</span><span class="summary-value">${document.getElementById('floor_level').value}</span></div>
+                <div class="summary-row"><span class="summary-label">Lease</span><span class="summary-value">${document.getElementById('remaining_lease').value} years</span></div>
+                <div class="summary-row"><span class="summary-label">Distance to MRT</span><span class="summary-value">${distanceToMRT !== null ? distanceToMRT + ' km' : '-'}</span></div>
+                <div class="summary-row"><span class="summary-label">Distance to Mall</span><span class="summary-value">${distanceToMall !== null ? distanceToMall + ' km' : '-'}</span></div>
+            `;
+
+            const current = document.querySelector(`.question[data-q="${currentQ}"]`);
+            current.classList.remove('active');
+            document.getElementById('result').classList.add('show');
+        }
+
+        function reset() {
+            ['address', 'flat_type', 'floor_level', 'remaining_lease', 'floor_area', 'town'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            document.querySelectorAll('.badge').forEach(b => b.style.display = 'none');
+            currentQ = 1;
+            updateDots();
+            
+            document.getElementById('result').classList.add('fade-out');
+            setTimeout(() => {
+                document.getElementById('result').classList.remove('show', 'fade-out');
+                const first = document.querySelector(`.question[data-q="1"]`);
+                first.classList.add('active', 'fade-in');
+                setTimeout(() => {
+                    first.classList.remove('fade-in');
+                }, 600);
+            }, 300);
+        }
+
+        function error(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 4000);
+            return false;
+        }
+
+        function badge(id, text) {
+            const el = document.getElementById(id);
+            el.textContent = text;
+            el.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
