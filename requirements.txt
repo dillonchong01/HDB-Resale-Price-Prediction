@@ -7,3 +7,4 @@ joblib
 gunicorn
 requests
 scikit-learn
+haversine
