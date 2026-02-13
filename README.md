@@ -23,15 +23,15 @@ The web application supports:
 
 The prediction model is trained using **XGBoost Regressor** on cleaned resale transaction data enriched with engineered features:
 
-- 🏙 Town  
-- 🏢 Flat Type  
-- 📐 Floor Area (sqm)  
-- 🏗 Floor Level  
-- 📜 Remaining Lease  
-- 📅 Transaction Year & Month  
-- 🌆 Mature Estate Classification  
-- 🚇 Distance to Nearest MRT  
-- 🛍 Distance to Nearest Mall  
+- Town  
+- Flat Type  
+- Floor Area (sqm)  
+- Floor Level  
+- Remaining Lease  
+- Transaction Year & Month  
+- Mature Estate Classification  
+- Distance to Nearest MRT  
+- Distance to Nearest Mall  
 
 Distances are computed using geocoding (OneMap API) and Haversine distance calculations.
 
