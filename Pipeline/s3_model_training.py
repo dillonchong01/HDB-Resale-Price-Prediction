@@ -34,50 +34,51 @@ for col in cat_features:
 X = merged_df.drop(columns=[target, "Address"])
 y = merged_df[target]
 
-# # 5 Fold OOF CV to Find Best No. of Estimators
-# kf = KFold(n_splits=5, shuffle=True, random_state=42)
-# oof_preds = np.zeros(len(X))
-# best_iterations = []
+# 5 Fold OOF CV to Find Best No. of Estimators
+kf = KFold(n_splits=5, shuffle=True, random_state=42)
+oof_preds = np.zeros(len(X))
+best_iterations = []
 
-# for fold, (train_idx, valid_idx) in enumerate(kf.split(X)):
-#     print(f"\nFold {fold + 1}")
+for fold, (train_idx, valid_idx) in enumerate(kf.split(X)):
+    print(f"\nFold {fold + 1}")
 
-#     X_train, X_valid = X.iloc[train_idx], X.iloc[valid_idx]
-#     y_train, y_valid = y.iloc[train_idx], y.iloc[valid_idx]
+    X_train, X_valid = X.iloc[train_idx], X.iloc[valid_idx]
+    y_train, y_valid = y.iloc[train_idx], y.iloc[valid_idx]
 
-#     model = xgb.XGBRegressor(
-#         objective="reg:absoluteerror",
-#         learning_rate=0.05,
-#         max_depth=6,
-#         n_estimators=20000,
-#         subsample=0.8,
-#         colsample_bytree=0.8,
-#         random_state=42,
-#         tree_method="hist",
-#         enable_categorical=True,
-#         eval_metric="mape",
-#         early_stopping_rounds=100
-#     )
+    model = xgb.XGBRegressor(
+        objective="reg:absoluteerror",
+        learning_rate=0.05,
+        max_depth=6,
+        n_estimators=20000,
+        subsample=0.8,
+        colsample_bytree=0.8,
+        random_state=42,
+        tree_method="hist",
+        enable_categorical=True,
+        eval_metric="mape",
+        early_stopping_rounds=100,
+        device="cuda"
+    )
 
-#     model.fit(
-#         X_train,
-#         y_train,
-#         eval_set=[(X_valid, y_valid)],
-#         verbose=False,
-#     )
+    model.fit(
+        X_train,
+        y_train,
+        eval_set=[(X_valid, y_valid)],
+        verbose=False,
+    )
 
-#     oof_preds[valid_idx] = model.predict(X_valid)
-#     best_iterations.append(model.best_iteration)
+    oof_preds[valid_idx] = model.predict(X_valid)
+    best_iterations.append(model.best_iteration)
 
-#     fold_mape = mean_absolute_percentage_error(y_valid, oof_preds[valid_idx])
-#     print(f"Fold MAPE: {fold_mape:.4f}")
-#     print(f"Best iteration: {model.best_iteration}")
+    fold_mape = mean_absolute_percentage_error(y_valid, oof_preds[valid_idx])
+    print(f"Fold MAPE: {fold_mape:.4f}")
+    print(f"Best iteration: {model.best_iteration}")
 
-# # Best OOF Mape and Mean Iterations
-# oof_mape = mean_absolute_percentage_error(y, oof_preds)
-# print(f"\nOOF MAPE: {oof_mape:.4f}")
-# best_iteration = int(np.mean(best_iterations))
-# print(f"\nUsing best_iteration = {best_iteration}")
+# Best OOF Mape and Mean Iterations
+oof_mape = mean_absolute_percentage_error(y, oof_preds)
+print(f"\nOOF MAPE: {oof_mape:.4f}")
+best_iteration = int(np.mean(best_iterations))
+print(f"\nUsing best_iteration = {best_iteration}")
 
 # Train Model on Full Dataset
 final_model = xgb.XGBRegressor(
@@ -91,9 +92,10 @@ final_model = xgb.XGBRegressor(
     tree_method="hist",
     enable_categorical=True,
     eval_metric="mape",
+    device="cuda"
 )
 
-final_model.fit(X, y, verbose=500)
+final_model.fit(X, y)
 
 # Save Model
 joblib.dump({"model": final_model, "categories": category_mappings}, "xgboost_model.pkl")

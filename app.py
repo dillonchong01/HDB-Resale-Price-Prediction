@@ -304,15 +304,9 @@ def health():
         ])
     })
 
+load_data()
 
-if __name__ == '__main__':
-    # Load data before starting server
-    load_data()
-    
-    # Check for required environment variables
-    if not os.getenv('ONEMAP_EMAIL') or not os.getenv('ONEMAP_PASSWORD'):
-        print("Set ONEMAP_EMAIL and ONEMAP_PASSWORD environment variables")
-    
-    # Run the Flask app
-    port = int(os.getenv('PORT', 5000))
-    app.run(debug=True, host='0.0.0.0', port=port)
+# if __name__ == '__main__':
+#     # Run the Flask app
+#     port = int(os.getenv('PORT', 5000))
+#     app.run(debug=True, host='0.0.0.0', port=port)
