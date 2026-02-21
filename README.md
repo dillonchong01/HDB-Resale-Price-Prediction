@@ -3,6 +3,7 @@
 An end-to-end web application built with a **FastAPI REST API Backend** and a **XGBoost Model** that predicts Singapore HDB resale prices using historical transaction data and location-based features.
 
 🔗 Live Demo: https://hdb-resale-prediction.vercel.app/
+
 🔗 Swagger UI: https://hdb-resale-price-prediction.onrender.com/docs
 
 ---
